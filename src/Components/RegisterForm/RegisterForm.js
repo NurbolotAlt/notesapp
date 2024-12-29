@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import './RegisterForm.css'
 import {FaUser, FaLock} from "react-icons/fa";
 import axios from 'axios'
 export default function RegisterForm() {
