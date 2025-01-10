@@ -55,9 +55,9 @@ export default function MainPage() {
             const resdata = res.data
             console.log("key", parsedData.keyid)
             const myDecipher = decipher(parsedData.keyid)
-            console.log("ayo", resdata)
+            console.log("resdata", resdata)
             const resstring = myDecipher(resdata)
-            console.log("ayo", resstring)
+            console.log("resstring", resstring)
             servdata.data = resstring
             console.log('servdata', servdata.data)
             console.log('Finshed')

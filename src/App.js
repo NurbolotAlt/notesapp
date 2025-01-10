@@ -17,6 +17,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginForm />}>
         </Route>
+        <Route path="/Login" element={<LoginForm />}>
+        </Route>
         <Route path="/Register" element={<RegisterForm /> }>
         </Route>
         <Route path="/VerificationPage" element={<EmailVerificationPage /> }>

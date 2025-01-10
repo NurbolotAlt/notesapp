@@ -134,31 +134,30 @@ var result = {
   id : 0
 }
 
-
-async function find(username) {
-    const found = await schemas.Users.find({username:username});
-    return found
-}
-
-async function find(username, password) {
-  const found = await schemas.Users.find({username:username, password:password});
-  return found
-}
-
 router.post('/auth', async(req,res) => {
     const {username} = req.body
     client.username = username;
     console.log(client.username + '|')
-    if(find(username)){
+    found = 0
+    await schemas.Users.findOne({username:username}).then(function(data){
+      console.log(data)
+      found = data
+    });
+    console.log(found)
+    if(found){
         console.log('Found')
+        res.send(diffielog)
     }
-    res.send(diffie)
+    else{
+      res.send('NO')
+    }
     res.end()
 })
 
  router.post('/checkEmail', async function (req,res){
     const {username} = req.body
-    console.log('We got:',username)
+    client.username = username
+    console.log('We got:', client)
     await readMails(username)
     console.log("res", result)
     res.send(result)
@@ -168,6 +167,7 @@ router.post('/auth', async(req,res) => {
 router.post('/sendPassword', async (req,res) => {
   const {password} = req.body;
   const keyID = diffie.id.concat(clientID.id)
+  console.log(keyID)
   const myDecipher = decipher(keyID)
   const decipheredPassword = myDecipher(password)
   console.log("KeyID ", keyID)
@@ -177,7 +177,7 @@ router.post('/sendPassword', async (req,res) => {
   const dataform = {username:client.username, password:decipheredPassword}
   const userdata = await schemas.Users.create(dataform)
   if(userdata){
-    res.send("All done")
+    res.send("OK")
   }
   else{
     res.send('Failed')
@@ -188,18 +188,26 @@ router.post('/sendPassword', async (req,res) => {
 router.post('/reg', async (req,res) => {
     const {username} = req.body
     console.log(username + '|')
-    if(find(username)){
-      console.log('Found')
-      res.send(diffielog)
+    found = 0
+    await schemas.Users.findOne({username:username}).then(function(data){
+      console.log(data)
+      found = data
+    });
+    console.log(found)
+    if(found){
+      console.log('username exists')
+      res.send('NO')
     }
     else{
-      res.send(0)
+      res.send(diffie)
     }
+    res.end()
 })
 
 router.post('/checkEmailLog', async function (req,res){
   const {username} = req.body
-  console.log('We got:',username)
+  client.username = username
+  console.log('We got:', client)
   await readMails(username)
   console.log("res", result)
   res.send(result)
@@ -214,10 +222,18 @@ router.post('/sendPasswordLog', async (req,res) => {
   const decipheredPassword = myDecipher(password)
   console.log("KeyID ", keyID)
   console.log("KeyID ", keyid)
+  console.log("diffielog ", diffielog)
+  console.log("diffie ", diffie)
   console.log("clientID ", clientID.id)
   console.log('Predeciphered Password:',password)
   console.log('Password:', decipheredPassword)
-  if(find(client.username, decipheredPassword)){
+  found = 0
+    await schemas.Users.findOne({username:client.username, password:decipheredPassword}).then(function(data){
+      console.log(data)
+      found = data
+    });
+    console.log(found)
+  if(found){
     console.log('User exists')
     res.send('OK')
   }

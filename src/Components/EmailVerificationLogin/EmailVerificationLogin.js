@@ -42,7 +42,7 @@ export default function EmailVerificationPage(){
             window.location.href = '/MainPage';
           }
           else{
-            alert('User does not exist!')
+            alert('Wrong Password')
           }
         })
     }

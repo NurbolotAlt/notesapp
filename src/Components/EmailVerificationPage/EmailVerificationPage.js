@@ -38,7 +38,13 @@ export default function EmailVerificationPage(){
         console.log('ciphered password',password.password)
         await axios.post('http://localhost:4000/sendPassword', password)
         .then(function (res){
-          //alert(res.data)
+            if (res.data === "OK"){
+                localStorage.setItem('myDataLog', JSON.stringify(parsedData));
+                window.location.href = '/Login';
+            }
+            else{
+                alert('Error')
+            }
         })
     }
 
